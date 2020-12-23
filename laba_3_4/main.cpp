@@ -411,8 +411,6 @@ int main()
         }
 
         if (sms == "10"){ // создание вектора
-
-
             vector<string> matrix;
             string otkuda;
             string kuda;
@@ -421,25 +419,19 @@ int main()
             bool wall = true;
             bool wall_1 = false;
             bool wall_2 = false;
-
             while(wall == true){
-
                 for(int i = 0; i < graf.size(); i++){
-
                     for(int j = 0; j < graf[i].size(); j++){
-
                         cout << graf[i][j] << " ";
                     }
                     cout << "" << endl;
                 }
-
                 cout << "Для завершения: 0; Для продолжения: 1 = ";
                 cin >> bb;
                 cout << "" << endl;
                 if(bb == "0"){
                     break;
                 }
-
                 cout << "" << endl;
                 cout << "Откуда Ks_";
                 cin >> otkuda;
@@ -466,10 +458,9 @@ int main()
                     continue;
                 }
 
-                bool wall_1 = true;
-                bool wall_2 = true;
+                bool wall_1 = false;
+                bool wall_2 = false;
                 cout << "Truba_";
-                cout << "";
                 cin >> t;
                 cout << "" << endl;
 
@@ -484,40 +475,69 @@ int main()
                     matrix.clear();
                     continue;
                 }
+                int a = graf[0].size();
+                int b = graf[1].size();
+                for(int i = 0; i < (graf.size() - 1); i++){
+                  if(a > b){
+                    b = graf[i].size();
+                  }else{
+                    a = graf[i+1].size();
+                  }
+                }
+                if (a < b){
+                  a = b;
+                }
 
                 for(int i = 0; i < graf.size(); i++){
-
-                    if(("KS_" + otkuda) == graf[i][0]){
-                        graf[i].push_back("ID_" + t);
-                        wall_1 = false;
-                        continue;
+                  if(("KS_" + otkuda) == graf[i][0]){
+                    while(graf[i].size() < a){
+                      graf[i].push_back("0");
                     }
-                    if(("KS_" + kuda) == graf[i][0]){
-                        graf[i].push_back("-ID_" + t);
-                        wall_2 = false;
-                        continue;
+                    wall_1 = true;
+                    graf[i].push_back("ID_" + t);
+                  }
+                  if(("KS_" + kuda) == graf[i][0]){
+                    while(graf[i].size() < a){
+                      graf[i].push_back("0");
                     }
-
+                    wall_2 = true;
+                    graf[i].push_back("-ID_" + t);
+                  }
                 }
-                if (wall_1 == true){
-                    matrix.push_back("KS_" + otkuda);
-                    graf.push_back(matrix);
-                    matrix.clear();
-                    graf[graf.size() - 1].push_back("ID_" + t);
+                if(wall_1 == false){
+                  graf.push_back({"KS_" + otkuda});
+                  while(graf[graf.size() - 1].size() < a){
+                    graf[graf.size() - 1].push_back("0");
+                  }
+                  graf[graf.size() - 1].push_back("ID_" + t);
                 }
-                if (wall_2 == true){
-                    matrix.push_back("KS_" + kuda);
-                    graf.push_back(matrix);
-                    matrix.clear();
-                    graf[graf.size() - 1].push_back("-ID_" + t);
+                if(wall_2 == false){
+                  graf.push_back({"KS_" + kuda});
+                  while(graf[graf.size() - 1].size() < a){
+                    graf[graf.size() - 1].push_back("0");
+                  }
+                  graf[graf.size() - 1].push_back("-ID_" + t);
                 }
-
-
+                a = graf[0].size();
+                b = graf[1].size();
+                for(int i = 0; i < (graf.size() - 1); i++){
+                  if(a > b){
+                    b = graf[i].size();
+                  }else{
+                    a = graf[i+1].size();
+                  }
+                }
+                if (a < b){
+                  a = b;
+                }
+                for(int i = 0; i < graf.size(); i++){
+                  while(graf[i].size() < a){
+                    graf[i].push_back("0");
+                  }
+                }
+              }
             }
 
-
-
-        }
 
         if (sms == "11"){ // Топологическая сортировка
             vector<string> mas;
