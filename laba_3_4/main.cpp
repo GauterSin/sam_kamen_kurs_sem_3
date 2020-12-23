@@ -495,9 +495,6 @@ int main()
                 }
               }
             }
-
-        if(sms == "12"){ //max_flow
-        }
         if (sms == "0"){
             wall = false;
         }
