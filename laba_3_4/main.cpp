@@ -116,7 +116,7 @@ class Truba{
                 }
             }
         };
-        // поиск труб по названию/признаку
+        // пои�к труб по названию/признаку
         void search(){
             cout<<"================"<<endl;
             string scales;
@@ -338,18 +338,9 @@ vector<string> topolog_sort(vector<vector<string>> vec){
             end_sort = false;
         }
 
-
-
-
-
     }
     return mas_sort;
-
-
 }
-
-
-
 
 
 
@@ -529,9 +520,35 @@ int main()
         }
 
         if (sms == "11"){ // Топологическая сортировка
-            //topolog_sort()
-        }
+            vector<string> mas;
+            int kolvo_simvols = 1;
+            string station;
 
+            for(int i = 0; i < vec.size(); i++){
+                for(int j = 1; j < vec[i].size(); j++){
+
+                    if(vec[i][j][0] != '-' ){
+                        kolvo_simvols++;
+                        if(kolvo_simvols == (vec[i].size() - 1)){
+
+                            station = vec[i][0];
+                        }
+                    }
+                    else{
+                        kolvo_simvols = 1;
+                        break;
+                    }
+                }
+            }
+
+            for(int i = 0; i < top_sort.size(); i++){
+              cout << top_sort[i] << " ";
+            }
+        }
+        if(sms == "12"){ //max_flow
+
+
+        }
         if (sms == "0"){
             wall = false;
         }
