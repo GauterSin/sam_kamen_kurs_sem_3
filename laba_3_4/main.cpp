@@ -262,86 +262,43 @@ class Ks{
 };
 
 
+void topolog_sort(vector<vector<string>> graf){
 
+  vector<string> top_sort_mas;
+  vector<int> trubs;
+  int kolvo = 0;
+  vector<vector<string>> matrix = {graf;
 
-string search_anti_minus(vector<vector<string>> vec){
-
-    vector<string> mas;
-    int kolvo_simvols = 1;
-    string station;
-
-    for(int i = 0; i < vec.size(); i++){
-        for(int j = 1; j < vec[i].size(); j++){
-
-            if(vec[i][j][0] != '-' ){
-                kolvo_simvols++;
-                if(kolvo_simvols == (vec[i].size() - 1)){
-
-                    station = vec[i][0];
-                }
-            }
-            else{
-                kolvo_simvols = 1;
-                break;
-            }
-
+  for(int i = 0; i < matrix.size(); i++){
+    for(int j = 1; j < matrix[i].size(); j++){
+      if(matrix[i][j][0] == '-'){
+        trubs.clear();
+        break;
+      }else{
+        if(matrix[i][j] != "0"){
+          trubs.push_back(j);
+        }else{
+          kolvo = kolvo + 1;
         }
-
+      }
     }
-
-    return station;
-}
-
-
-
-vector<string> topolog_sort(vector<vector<string>> vec){
-
-    vector<string> mas_sort;
-    bool end_sort = true;
-    string station;
-
-    vector<vector<string>> mirror_graf = vec;
-
-    while(end_sort == true){
-
-        vector<string> trubs_del;
-        station = search_anti_minus(mirror_graf);
-
-        for(int i = 0; i < mirror_graf.size(); i++){
-            if(mirror_graf[i][0] == station){
-                for(int j = 1; j < mirror_graf[i].size(); j++){
-                    trubs_del.push_back(mirror_graf[i][j]);
-                }
-                mirror_graf.erase(mirror_graf.cbegin() + i);
-                break;
-            }else{
-                continue;
-            }
-
+    if((trubs.size() + 1) == (matrix[i].size() - kolvo)){
+      top_sort_mas.push_back(matrix[i][0]);
+      matrix.erase(matrix.cbegin() + i);
+      if(matrix.size() == 0){
+        break;
+      }
+      for(int z = 0; z < matrix.size(); z++){
+        kolvo = 0;
+        for(auto b : trubs){
+          matrix[z].erase(matrix[z].cbegin() + b);
+          kolvo = kolvo + 1;
         }
-
-        for(int i = 0; i < mirror_graf.size(); i++){
-            for(int j = 1; j < mirror_graf[i].size(); j++){
-                for(int z = 0; z < trubs_del.size(); z++){
-                    if(trubs_del[z] == mirror_graf[i][j]){
-                        mirror_graf[i].erase(mirror_graf[i].cbegin() + j);
-                        break;
-                    }
-
-                }
-
-            }
-        }
-        mas_sort.push_back(station);
-
-        if(mirror_graf.size() == 0){
-            end_sort = false;
-        }
-
+      }
+      i = 0;
     }
-    return mas_sort;
+  }
 }
-
 
 
 
@@ -376,7 +333,6 @@ int main()
         if (sms == "1"){
             truba.add();
         }
-
         if (sms == "2"){
             truba.del();
         }
@@ -419,6 +375,8 @@ int main()
             bool wall = true;
             bool wall_1 = false;
             bool wall_2 = false;
+
+
             while(wall == true){
                 for(int i = 0; i < graf.size(); i++){
                     for(int j = 0; j < graf[i].size(); j++){
@@ -538,36 +496,7 @@ int main()
               }
             }
 
-
-        if (sms == "11"){ // Топологическая сортировка
-            vector<string> mas;
-            int kolvo_simvols = 1;
-            string station;
-
-            for(int i = 0; i < vec.size(); i++){
-                for(int j = 1; j < vec[i].size(); j++){
-
-                    if(vec[i][j][0] != '-' ){
-                        kolvo_simvols++;
-                        if(kolvo_simvols == (vec[i].size() - 1)){
-
-                            station = vec[i][0];
-                        }
-                    }
-                    else{
-                        kolvo_simvols = 1;
-                        break;
-                    }
-                }
-            }
-
-            for(int i = 0; i < top_sort.size(); i++){
-              cout << top_sort[i] << " ";
-            }
-        }
         if(sms == "12"){ //max_flow
-
-
         }
         if (sms == "0"){
             wall = false;
