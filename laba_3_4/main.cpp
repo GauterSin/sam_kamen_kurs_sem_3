@@ -262,17 +262,15 @@ class Ks{
 };
 
 
-void topolog_sort(vector<vector<string>> graf){
+vector<string> topolog_sort(vector<vector<string>> graf){
 
   vector<string> top_sort_mas;
   vector<int> trubs;
   int kolvo = 0;
-  vector<vector<string>> matrix = {graf;
-
+  vector<vector<string>> matrix = graf;
   for(int i = 0; i < matrix.size(); i++){
     for(int j = 1; j < matrix[i].size(); j++){
       if(matrix[i][j][0] == '-'){
-        trubs.clear();
         break;
       }else{
         if(matrix[i][j] != "0"){
@@ -283,6 +281,11 @@ void topolog_sort(vector<vector<string>> graf){
       }
     }
     if((trubs.size() + 1) == (matrix[i].size() - kolvo)){
+      if(kolvo > trubs.size()){
+        kolvo = 0;
+        trubs.clear();
+        continue;
+      }
       top_sort_mas.push_back(matrix[i][0]);
       matrix.erase(matrix.cbegin() + i);
       if(matrix.size() == 0){
@@ -291,13 +294,16 @@ void topolog_sort(vector<vector<string>> graf){
       for(int z = 0; z < matrix.size(); z++){
         kolvo = 0;
         for(auto b : trubs){
-          matrix[z].erase(matrix[z].cbegin() + b);
+          matrix[z].erase(matrix[z].cbegin() + b - kolvo);
           kolvo = kolvo + 1;
         }
       }
-      i = 0;
+      i = -1;
     }
+    kolvo = 0;
+    trubs.clear();
   }
+  return top_sort_mas;
 }
 
 
@@ -494,10 +500,32 @@ int main()
                   }
                 }
               }
+              vector<vector<string>> graf_2 = graf;
+              matrix.clear();
+              matrix = topolog_sort(graf);
+
+              for(int i = 0; i < graf_2.size(); i++){
+                for(int j = 0; j < matrix.size(); j++){
+                  if(matrix[j] == graf_2[i][0]){
+                    graf[j] = graf_2[i];
+                  }
+                }
+              }
             }
-        if (sms == "0"){
+
+          if(sms == "11"){
+            vector<string> graf_2;
+            graf_2 = topolog_sort(graf);
+            for(auto i : graf_2){
+              cout << i << " ";
+            }
+            cout << "" << endl;
+
+          }
+
+          if (sms == "0"){
             wall = false;
-        }
+          }
                 ofstream outf("laba_2_data.txt");
                 outf << "Truba:"<< endl;
                 for(int i = 0; i <= (truba.id.size() - 1); i++){
@@ -510,71 +538,6 @@ int main()
                   outf << "shop = " << ks.shop[i] << endl;
                 };
                 outf.close();
-
-    }
+              }
 
 }
-
-
-// int main(int argc, char const *argv[]) {
-//   vector<string> top_sort_mas;
-//   vector<int> trubs;
-//   int kolvo = 0;
-//   bool wal = false;
-//   vector<vector<string>> matrix = {
-//     {"KS_0", "0", "0", "0", "0", "-ID_5",},
-//     {"KS_1", "-ID_1", "0", "0", "-ID_4", "0",},
-//     {"KS_3", "0", "-ID_2", "ID_3", "0", "0",},
-//     {"KS_4", "0", "0", "-ID_3", "ID_4", "0",},
-//     {"KS_2", "ID_1", "ID_2", "0", "0", "ID_5",},
-//   };
-//
-//   for(int i = 0; i < matrix.size(); i++){
-//     cout << "LOLOL = " << i << endl;
-//     for(int j = 1; j < matrix[i].size(); j++){
-//       if(matrix[i][j][0] == '-'){
-//         break;
-//       }else{
-//         if(matrix[i][j] != "0"){
-//           trubs.push_back(j);
-//         }else{
-//           kolvo = kolvo + 1;
-//         }
-//       }
-//     }
-//     if((trubs.size() + 1) == (matrix[i].size() - kolvo)){
-//       if(kolvo > trubs.size()){
-//         kolvo = 0;
-//         trubs.clear();
-//         continue;
-//       }
-//       top_sort_mas.push_back(matrix[i][0]);
-//       matrix.erase(matrix.cbegin() + i);
-//       if(matrix.size() == 0){
-//         break;
-//       }
-//       for(int z = 0; z < matrix.size(); z++){
-//         kolvo = 0;
-//         for(auto b : trubs){
-//           cout << "BUBUUB = " << b << endl;
-//           matrix[z].erase(matrix[z].cbegin() + b - kolvo);
-//           kolvo = kolvo + 1;
-//         }
-//       }
-//       for(int k = 0; k < matrix.size(); k++){
-//         for(int p = 0; p< matrix[k].size(); p++){
-//           cout << matrix[k][p] << " ";
-//         }
-//         cout << "" << endl;
-//       }
-//       i = -1;
-//
-//       cout << "HI" << endl;
-//     }
-//     kolvo = 0;
-//     trubs.clear();
-//   }
-//   for(int i = 0; i < top_sort_mas.size(); i++){
-//     cout << top_sort_mas[i] << " ";
-//   }
-// }
