@@ -1,3 +1,13 @@
+// #include <iostream>
+// #include <fstream>
+// #include <string>
+// #include <cmath>
+// #include <vector>
+// #include <stdlib.h>
+// #include <typeinfo>
+// using namespace std;
+
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -178,10 +188,13 @@ int main() {
                 };
                 if (ves == "5") {
                     cout << "--------------------" << endl;
+                    ves = "";
                     cout << "id ks: ";
                     cin >> ves;
+                    ves = "id " + ves;
                     cout << "kol-vo jober: ";
-                    cin >> chiki;
+                    cin >> m;
+                    cout << "" << endl;
                     if (cin.fail()) {
                         cin.clear();
                         cin.ignore(100000, '\n');
@@ -199,7 +212,7 @@ int main() {
                       int n = (int)m;
                         for (int i = 0; i <= (schet_k - 1); i++) {
                             if (id_ks[i] == ves) {
-                                jober.push_back(n);
+                                jober[i] = m;
                             };
                         };
                     };
