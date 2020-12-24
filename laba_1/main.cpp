@@ -1,7 +1,8 @@
 #include <iostream>
-#include <string>
-#include <vector>
 #include <fstream>
+#include <string>
+#include <cmath>
+#include <vector>
 using namespace std;
 
 
@@ -28,6 +29,7 @@ int main() {
 
     string ves;
     float chiki;
+    double m;
 
     cout << "337.Menu" << endl;
     cout << "1.add truba" << endl;
@@ -187,10 +189,17 @@ int main() {
                         continue;
                     }
                     else {
-
+                      while (cin.fail() || (m-floor(m)))
+                      {
+                          cout << "Error. Nubmer of elements has to be integer. Try again: " << endl;
+                          cin.clear();
+                          cin.ignore(256, '\n');
+                          cin >> m;
+                      }
+                      int n = (int)m;
                         for (int i = 0; i <= (schet_k - 1); i++) {
                             if (id_ks[i] == ves) {
-                                jober.push_back(chiki);
+                                jober.push_back(n);
                             };
                         };
                     };
