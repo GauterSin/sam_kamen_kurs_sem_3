@@ -9,9 +9,12 @@ using namespace std;
 int main(int argc, char const *argv[]) {
 
   vector<vector<string>> matrix = {
-    {"KS_1", "ID_1", "ID_2", "0"},
-    {"KS_2", "-ID_1", "0", "ID_3"},
-    {"KS_3", "0", "-ID_2", "-ID_3"},
+    {"KS_1", "ID_1", "ID_2", "0", "0", "0", "0", "0", "0", "0"},
+    {"KS_3", "0", "-ID_2", "ID_3", "ID_5", "0", "0", "0", "0", "ID_9"},
+    {"KS_2", "-ID_1", "0", "-ID_3", "0", "ID_4", "0", "0", "0", "0"},
+    {"KS_4", "0", "0", "0", "-ID_5", "0", "ID_6", "ID_8", "0", "-ID_9"},
+    {"KS_5", "0", "0", "0", "0", "-ID_4", "-ID_6", "0", "ID_7", "0"},
+    {"KS_6", "0", "0", "0", "0", "0", "0", "-ID_8", "-ID_7", "0"},
   };
   vector<float> l = {1, 4, 2};
   bool wall = false;
@@ -89,9 +92,10 @@ int main(int argc, char const *argv[]) {
 //  wall = false;
   int j_pos = 0;
   int i_pos = 0;
-  int finish_circle = 0;
+  int finish_circle = -1;
   cout << "Количество_1 = " << kolvo_1 << endl;
   cout << "Количество_2 = " << kolvo_2 << endl;
+  cout << "Длина массива = " << mas_j.size() << endl;
   vector<int> branching;
   if(a > b){
     cout << "НЕ может прийти" << endl;
@@ -131,14 +135,18 @@ int main(int argc, char const *argv[]) {
         cout << "i = " << i << endl;
         if(mas_j[i] > 0){
           j_pos = i;
+          if(mas_j[i+1] < 0){
+            wall = false;
+          }
           cout << "j_pos = " << j_pos << endl;
           for(int j = j_pos; j < mas_j.size(); j++){
+            cout << "ХУЕТА = " << j << endl;
             if(mas_j[i] == (mas_j[j] * (-1))){
               cout << "Зашала в проверку на одинаковые элемы" << endl;
               i_pos = j;
               cout << "i_pos_posle = " << i_pos << endl;
               wall = true;
-              if(j > (mas_j.size() - kolvo_2)){
+              if((j + 1)> (mas_j.size() - kolvo_2)){
                 if(branching.size() == 0){
                   cout << "branching.size" << endl;
                   finish_circle = finish_circle + 1;
@@ -153,15 +161,21 @@ int main(int argc, char const *argv[]) {
               i = i_pos;
               break;
             }
-            if((mas_j[j + 1] > 0) and (wall == true)){
+            //cout << "Значение стены = " << wall << endl;
+            if((mas_j[j + 1] > 0) and (wall == true) and (mas_j[j] > 0)){
               cout << "Контейнер маркеров" << endl;
               branching.push_back(j); // size - 1
+              for(int z = 0; z < branching.size(); z++){
+                cout << branching[z] << " ";
+              }
+              cout << "" << endl;
+
               wall = false;
               continue;
             }
           }
         }
-        if(finish_circle == kolvo_1){
+        if(finish_circle == (kolvo_1 - 1)){
           break;
         }
       }
