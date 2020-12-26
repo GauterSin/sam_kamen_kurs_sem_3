@@ -140,7 +140,7 @@ int main(int argc, char const *argv[]) {
           }
           cout << "j_pos = " << j_pos << endl;
           for(int j = j_pos; j < mas_j.size(); j++){
-            cout << "ХУЕТА = " << j << endl;
+            cout << "Значение J = " << j << endl;
             if(mas_j[i] == (mas_j[j] * (-1))){
               cout << "Зашала в проверку на одинаковые элемы" << endl;
               i_pos = j;
