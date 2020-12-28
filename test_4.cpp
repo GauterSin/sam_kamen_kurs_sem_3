@@ -103,7 +103,6 @@ int main(int argc, char const *argv[]) {
   }
   cout << "" << endl;
 
-//  wall = false;
   int j_pos = 0;
   int i_pos = 0;
   int finish_circle = -1;
@@ -123,9 +122,11 @@ int main(int argc, char const *argv[]) {
       k = a;
       int remember_el;
       wall = false;
+      bool wall_2 = false;
       for(int i = i_pos; i < mas_j.size(); i++){
-        if(dlina_1 == 0){
+        if((dlina_1 == 0) or (wall_2 == true)){
           remember_el = k;
+          wall_2 = false;
         }else{
           remember_el = k + 1;
         }
@@ -138,13 +139,16 @@ int main(int argc, char const *argv[]) {
             if((mas_j[j - 1] < 0) and (mas_j[j] > 0)){
               k = k + 1;
             }
+      //      cout << "Значение J = " << j << endl;
+      //      cout << "Значение K = " << k << endl;
             if(mas_j[i] == (mas_j[j] * (-1))){
               dlina_1 = dlina_1 + graf_2[remember_el][mas_j[i]];
-              cout << "Зашала в проверку на одинаковые элемы" << endl;
-              cout << "i = " << i << endl;
-              cout << "Значение J = " << j << endl;
-              cout << "Значение K = " << k << endl;
-              cout << "remember_el = " << remember_el << endl;
+              cout << "----------------"<< endl;
+            //  cout << "Зашала в проверку на одинаковые элемы" << endl;
+            //  cout << "i = " << i << endl;
+            //  cout << "Значение J после = " << j << endl;
+          //    cout << "Значение K после проверкаи= " << k << endl;
+        //      cout << "remember_el = " << remember_el << endl;
               cout << "Элемент графа = " << graf_2[remember_el][mas_j[i]] << endl;
               cout << "----------------"<< endl;
               i_pos = j;
@@ -152,7 +156,7 @@ int main(int argc, char const *argv[]) {
               if((j + 1)> (mas_j.size() - kolvo_2)){
                 len_t.push_back(dlina_1);
                 if(branching.size() == 0){
-                  cout << "branching.size" << endl;
+                  cout << "00000000000000000000000branching.size" << endl;
                   finish_circle = finish_circle + 1;
                   dlina_1 = 0;
                   k = a;
@@ -167,6 +171,7 @@ int main(int argc, char const *argv[]) {
                   k = index_i[index_i.size() - 1];
                   cout << "Значение K в Удаленииии = " << k << endl;
                   index_i.pop_back();
+                  wall_2 = true;
                 }
               } // отвечает за продвижение старта
               i = i_pos;
