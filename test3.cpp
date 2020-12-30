@@ -26,6 +26,7 @@ int main(int argc, char const *argv[]) {
   int b = matrix.size();
   int kolvo_1 = 0;
   int kolvo_2 = 0;
+  int k = 0;
   vector<string> position_start;
   vector<string> position_finish;
 
@@ -47,14 +48,16 @@ int main(int argc, char const *argv[]) {
         if(matrix[i][j] != "0"){
           // position_finish.push_back();
           if(matrix[i][j][0] != '-'){
+            k++;
             kolvo_1 = kolvo_1 + 1;
             mas_j.push_back(j);
           }else{
             kolvo_1 = kolvo_1 + 1;
-            mas_j.push_back(j * (-1));
+            mas_j.insert(mas_j.begin() + mas_j.size() - k, j * (-1));
           }
         }
       }
+      k = 0;
     }
     if(matrix[i][0] == ("KS_" + kuda)){
       b = i;
@@ -62,26 +65,30 @@ int main(int argc, char const *argv[]) {
         if(matrix[i][j] != "0"){
           // position_finish.push_back();
           if(matrix[i][j][0] != '-'){
+            k++;
             kolvo_2 = kolvo_2 + 1;
             mas_j.push_back(j);
           }else{
             kolvo_2 = kolvo_2 + 1;
-            mas_j.push_back(j * (-1));
+            mas_j.insert(mas_j.begin() + mas_j.size() - k, j * (-1));
           }
         }
       }
+      k = 0;
     }
     if((wall == true) and (i > a) and (i < b)){
       for(int j = 1; j < matrix[i].size(); j++){
         if(matrix[i][j] != "0"){
           // position_finish.push_back();
           if(matrix[i][j][0] != '-'){
+            k++;
             mas_j.push_back(j);
           }else{
-            mas_j.push_back(j * (-1));
+            mas_j.insert(mas_j.begin() + mas_j.size() - k, j * (-1));
           }
         }
       }
+      k = 0;
     }
   }
   for(int i = 0; i < mas_j.size(); i++){
@@ -103,34 +110,9 @@ int main(int argc, char const *argv[]) {
     if(a == b){
       cout << "Путь равен НУЛЮ" << endl;
     }else{
-      // for(int i = i_pos; i < (mas_j.size() - kolvo_2); i++){
-      //   if(mas_j[i] > 0){
-      //     j_pos = i + 1;
-      //     for(int j = j_pos; j < mas_j.size(); j++){
-      //       if(mas_j[i] == (mas_j[j] * (-1))){
-      //       //  wall = true;
-      //         if((j + 1) > (mas_j.size() - kolvo_2)){
-      //           for(int z = 0; z < mas_x.size(); z++){ // как-то пройтись по остатку
-      //             if(mas_j[j] == (mas_x[z] * (-1))){
-      //               k = k + 1;
-      //               i_pos = k;
-      //               break;
-      //             }
-      //           }
-      //         }
-      //         i_pos = j;
-      //         break;
-      //       }
-      //     }
-      //   }
-      //   if(k == kolvo_1){
-      //     break;
-      //   }
-      // }
 
-      // wall = true;
+
       wall = false;
-
       for(int i = i_pos; i < mas_j.size(); i++){
         cout << "i = " << i << endl;
         if(mas_j[i] > 0){
@@ -180,6 +162,8 @@ int main(int argc, char const *argv[]) {
         }
       }
       cout << "Что-то = " << finish_circle << endl;
+
+
     }
   }
 }
