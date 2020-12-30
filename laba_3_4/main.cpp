@@ -11,7 +11,8 @@ class Truba{
     public:
         vector<string> id = {"ID_1", "ID_2", "ID_3"};
         vector<string> repairs = {"В_ремонте", "Исправна", "Исправна"};
-        vector<float> l = {10,11.2,9};
+        vector<float> l = {1,2,3};
+        vector<float> diametr = {10, 20, 30};
 
         // добавляем трубу
         void show(){
@@ -26,6 +27,7 @@ class Truba{
 
             cout<<"================"<<endl;
             string scales;
+            float b;
             cout<<"Ремонтируется или нет?"<<endl;
             cout<<"1.В ремонте"<<endl;
             cout<<"2.Исправна"<<endl;
@@ -43,16 +45,45 @@ class Truba{
                 repairs.push_back("Исправна");
 
                 string name;
-                    name = "ID_" + to_string(id.size() + 1);
+                name = "ID_" + to_string(id.size() + 1);
                 id.push_back(name);
             }
             if((scales != "1") and (scales != "2")){
                 cout<<"Ошибочка вышла((((((((("<<endl;
             }
 
+            cout<<"Длина?"<<endl;
+            cout<<"l = "<<endl;
+            cin >> b;
+            if(cin.fail()){
+                cin.clear();
+                cin.ignore(100000, '\n');
+                id.pop_back();
+                repairs.pop_back();
+                cout<<"Mistake\n"<<endl;
+            }else{
+              cout << "" << endl;
+              l.push_back(b);
+              cout<<"Производительность?"<<endl;
+              cout<<"diametr = "<<endl;
+              cin >> b;
+              if(cin.fail()){
+                  cin.clear();
+                  cin.ignore(100000, '\n');
+                  id.pop_back();
+                  repairs.pop_back();
+                  l.pop_back();
+                  cout<<"Mistake\n"<<endl;
+              }else{
+                cout << "" << endl;
+                diametr.push_back(b);
+              }
+            }
+
+
         };
         // удаляем трубу
-        void del(){
+        string del(){
             cout<<"================"<<endl;
             for (int i = 0; i<=(id.size()-1); i++){
                 cout<<id[i]<< " ";
@@ -66,9 +97,13 @@ class Truba{
                 if (("ID_" + name) == id[i]){
                     id.erase(id.cbegin() + i);
                     repairs.erase(repairs.cbegin() + i);
+                    l.erase(l.cbegin() + i);
+                    diametr.erase(diametr.cbegin() + i);
                     break;
                 }
             }
+
+            return name;
 
         };
         // редактирую количество труб
@@ -197,7 +232,7 @@ class Ks{
                 }
             };
         // удаляем кс
-        void del(){
+        string del(){
             cout<<"================"<<endl;
             for(int i = 0; i<=(id.size()-1); i++){
                 cout<<id[i]<< " ";
@@ -214,6 +249,7 @@ class Ks{
                     break;
                 }
             }
+            return name;
 
         };
 
@@ -314,10 +350,29 @@ int main()
 {
     setlocale(LC_ALL, "rus"); // корректное отображение Кириллицы
     Truba truba;
-    vector<vector<string>> graf;
     Ks ks;
     bool wall = true;
     string sms;
+
+    vector<string> matrix;
+    string otkuda;
+    string kuda;
+    string t;
+    string bb;
+    bool wall_1 = false;
+    bool wall_2 = false;
+    vector<vector<string>> graf;
+    vector<vector<float>> graf_L;
+    vector<vector<float>> graf_proizvod;
+    vector<vector<string>> graf_2 = graf;
+
+
+    vector<int> mas_j;
+
+
+
+
+
 
     while (wall == true){
         cout<<"================"<<endl;
@@ -340,7 +395,48 @@ int main()
             truba.add();
         }
         if (sms == "2"){
-            truba.del();
+            string name_1 = "ID_" + truba.del();
+
+            int chislochek;
+
+            cout << "ЭТО имя = " << name_1 << endl;
+            for(int i = 0; i < graf.size(); i++){
+              for(int j = 0; j < graf[i].size(); j++){
+                if(graf[i][j] == name_1){
+                  chislochek = j;
+                }
+              }
+            }
+            for(int i = 0; i < graf.size(); i++){
+              graf[i].erase(graf[i].begin() + chislochek);
+              graf_L[i].erase(graf_L[i].begin() + chislochek);
+              graf_proizvod[i].erase(graf_proizvod[i].begin() + chislochek);
+            }
+            for(int i = 0; i < graf.size(); i++){
+              for(int j = 0; j < graf[i].size(); j++){
+                cout << graf[i][j] << " ";
+              }
+              cout << "" << endl;
+            }
+            graf_2 = graf;
+            matrix = topolog_sort(graf);
+
+
+            for(int i = 0; i < graf_2.size(); i++){
+              for(int j = 0; j < matrix.size(); j++){
+                if(graf_2[i][0] == matrix[j]){
+                  graf[i] = graf_2[j];
+                }
+              }
+            }
+
+            for(int i = 0; i < graf.size(); i++){
+              for(int j = 0; j < graf[i].size(); j++){
+                cout << graf[i][j] << " ";
+              }
+              cout << "" << endl;
+            }
+            matrix.clear();
         }
 
         if (sms == "3"){
@@ -361,8 +457,62 @@ int main()
 
 
         if (sms == "7"){
-            ks.del();
-        }
+          string name = "KS_" + ks.del();
+
+          cout << "ЭТО имя = " << name << endl;
+
+          vector<int> plus;
+
+          int schitala = 0;
+
+          for(int i = 0; i < graf.size(); i++){
+              if(name == graf[i][0]){
+                for(int j = 1; j < graf[i].size(); j++){
+                  if(graf[i][j] != "0"){
+                    plus.push_back(j);
+                  }
+                }
+                graf.erase(graf.begin() + i);
+                graf_L.erase(graf_L.begin() + i);
+                graf_proizvod.erase(graf_proizvod.begin() + i);
+              }
+            }
+
+            for(int i = 0; i < graf.size(); i++){
+              for(auto j : plus){
+                graf[i].erase(graf[i].begin() + j - schitala);
+                graf_L[i].erase(graf_L[i].begin() + j - schitala);
+                graf_proizvod[i].erase(graf_proizvod[i].begin() + j - schitala);
+                schitala = schitala + 1;
+              }
+              schitala = 0;
+            }
+            for(int i = 0; i < graf.size(); i++){
+              for(int j = 0; j < graf[i].size(); j++){
+                cout << graf[i][j] << " ";
+              }
+              cout << "" << endl;
+            }
+            graf_2 = graf;
+            matrix = topolog_sort(graf);
+
+
+            for(int i = 0; i < graf_2.size(); i++){
+              for(int j = 0; j < matrix.size(); j++){
+                if(graf_2[i][0] == matrix[j]){
+                  graf[i] = graf_2[j];
+                }
+              }
+            }
+
+            for(int i = 0; i < graf.size(); i++){
+              for(int j = 0; j < graf[i].size(); j++){
+                cout << graf[i][j] << " ";
+              }
+              cout << "" << endl;
+            }
+            matrix.clear();
+          }
 
         if (sms == "8"){
             ks.search();
@@ -373,15 +523,10 @@ int main()
         }
 
         if (sms == "10"){ // создание вектора
-            vector<string> matrix;
-            string otkuda;
-            string kuda;
-            string t;
-            string bb;
-            bool wall = true;
-            bool wall_1 = false;
-            bool wall_2 = false;
 
+          graf.clear();
+          graf_L.clear();
+          graf_2.clear();
 
             while(wall == true){
                 for(int i = 0; i < graf.size(); i++){
@@ -417,16 +562,45 @@ int main()
                     }
                 }
 
+
                 if((wall_1 == false) or (wall_2 == false)){
                     cout << "Ошибка при выборе станции" << endl;
                     continue;
                 }
 
-                bool wall_1 = false;
-                bool wall_2 = false;
+                wall_1 = false;
+                wall_2 = false;
+                bool truba_bool = false;
                 cout << "Truba_";
                 cin >> t;
                 cout << "" << endl;
+
+                for(auto i : truba.id){
+                  if(("ID_" + t) == i ){
+                    truba_bool = true;
+                  }
+                }
+                if(truba_bool == false){
+                  cout << "Нема такой трубы" << endl;
+                  continue;
+                }
+
+
+
+                for(int i = 0; i < graf.size(); i++){
+                  for(int j = 0; j < graf[i].size(); j++){
+                    if(("ID_" + t) == graf[i][j]){
+                      truba_bool = false;
+                    }
+                  }
+                }
+                if(truba_bool == false){
+                  cout << "Эта труба уже используется" << endl;
+                  continue;
+                }
+
+
+
 
                 if(graf.size() == 0){
                     matrix.push_back("KS_" + otkuda);
@@ -500,27 +674,266 @@ int main()
                   }
                 }
               }
-              vector<vector<string>> graf_2 = graf;
-              matrix.clear();
+
+              for(int i = 0; i < graf.size(); i++){
+                for(int j = 0; j < graf[i].size(); j++){
+                  cout << graf[i][j] << " ";
+                }
+                cout << "" << endl;
+              }
+              cout << "" << endl;
+
+
+              graf_2 = graf;
               matrix = topolog_sort(graf);
+
 
               for(int i = 0; i < graf_2.size(); i++){
                 for(int j = 0; j < matrix.size(); j++){
-                  if(matrix[j] == graf_2[i][0]){
-                    graf[j] = graf_2[i];
+                  if(graf_2[i][0] == matrix[j]){
+                    graf[i] = graf_2[j];
+                  }
+                }
+              }
+
+              for(int i = 0; i < graf.size(); i++){
+                for(int j = 0; j < graf[i].size(); j++){
+                  cout << graf[i][j] << " ";
+                }
+                cout << "" << endl;
+              }
+
+
+
+              for(int i = 0; i < graf.size(); i++){
+                graf_L.push_back({0});
+                graf_proizvod.push_back({0});
+                for(int j = 1; j < graf[i].size(); j++){
+                  if(graf[i][j] == "0"){
+                    graf_L[i].push_back(0);
+                    graf_proizvod[i].push_back(0);
+                  }else{
+                    if(graf[i][j][0] != '-'){
+                      for(int z = 0; z < truba.id.size(); z++){
+                        if(graf[i][j] == truba.id[z]){
+                          graf_L[i].push_back(truba.l[z]);
+                          graf_proizvod[i].push_back(pow(truba.diametr[z], 5) / truba.l[z]);
+                        }
+                      }
+                    }else{
+                      graf_L[i].push_back(0);
+                      graf_proizvod[i].push_back(0);
+                    }
+                  }
+                }
+              }
+
+              for(int i = 0; i < graf.size(); i++){
+                for(int j = 0; j < graf[i].size(); j++){
+                  cout << graf_L[i][j] << " ";
+                }
+                cout << "" << endl;
+              }
+              cout << "--------------" << endl;
+              for(int i = 0; i < graf.size(); i++){
+                for(int j = 0; j < graf[i].size(); j++){
+                  cout << graf_proizvod[i][j] << " ";
+                }
+                cout << "" << endl;
+              }
+              matrix.clear();
+            }
+
+          if(sms == "11"){
+            matrix = topolog_sort(graf);
+            for(auto i : matrix){
+              cout << i << " ";
+            }
+            cout << "" << endl;
+            matrix.clear();
+          }
+          if(sms == "12"){
+
+            wall = false;
+
+            int a = 0;
+            graf_2 = graf;
+            int b = graf_2.size();
+            int kolvo_1 = 0;
+            int kolvo_2 = 0;
+            int k = 0;
+            float dlina_1 = 0;
+            vector<float> dlina_2;
+            vector<int> branching;
+            vector<float> len_t;
+            vector<int> index_i;
+            mas_j.clear();
+            len_t.clear();
+            index_i.clear();
+            dlina_2.clear();
+            branching.clear();
+            int j_pos = 0;
+            int i_pos = 0;
+            int finish_circle = -1;
+
+            graf_2 = graf;
+
+
+            cout << "Откуда = ";
+            cin >> otkuda;
+            cout << "" << endl;
+            cout << "Куда = ";
+            cin >> kuda;
+            cout << "" << endl;
+
+            for(int i = 0; i < graf_2.size(); i++){
+              if(graf_2[i][0] == ("KS_" + otkuda)){
+                a = i;
+                wall = true;
+                for(int j = 1; j < graf_2[i].size(); j++){
+                  if(graf_2[i][j] != "0"){
+                    if(graf_2[i][j][0] != '-'){
+                      k++;
+                      kolvo_1 = kolvo_1 + 1;
+                      mas_j.push_back(j);
+                    }else{
+                      kolvo_1 = kolvo_1 + 1;
+                      mas_j.insert(mas_j.begin() + mas_j.size() - k, j * (-1));
+                    }
+                  }
+                }
+                k = 0;
+              }
+              if(graf_2[i][0] == ("KS_" + kuda)){
+                b = i;
+                for(int j = 1; j < graf_2[i].size(); j++){
+                  if(graf_2[i][j] != "0"){
+                    if(graf_2[i][j][0] != '-'){
+                      k++;
+                      kolvo_2 = kolvo_2 + 1;
+                      mas_j.push_back(j);
+                    }else{
+                      kolvo_2 = kolvo_2 + 1;
+                      mas_j.insert(mas_j.begin() + mas_j.size() - k, j * (-1));
+                    }
+                  }
+                }
+                k = 0;
+              }
+              if((wall == true) and (i > a) and (i < b)){
+                for(int j = 1; j < graf_2[i].size(); j++){
+                  if(graf_2[i][j] != "0"){
+                    if(graf_2[i][j][0] != '-'){
+                      k++;
+                      mas_j.push_back(j);
+                    }else{
+                      mas_j.insert(mas_j.begin() + mas_j.size() - k, j * (-1));
+                    }
+                  }
+                }
+                k = 0;
+              }
+            }
+            for(int i = 0; i < mas_j.size(); i++){
+              cout << mas_j[i] << " ";
+            }
+            cout << "" << endl;
+
+            if(a > b){
+              cout << "НЕ может прийти" << endl;
+            }else{
+              if(a == b){
+                cout << "Путь равен НУЛЮ" << endl;
+              }else{
+
+                k = a;
+                int remember_el;
+                wall = false;
+                bool wall_2 = false;
+                for(int i = i_pos; i < mas_j.size(); i++){
+                  if((dlina_1 == 0) or (wall_2 == true)){
+                    remember_el = k;
+                    wall_2 = false;
+                  }else{
+                    remember_el = k + 1;
+                  }
+                  if(mas_j[i] > 0){
+                    j_pos = i;
+                    if(mas_j[i+1] < 0){
+                      wall = false;
+                    }
+                    for(int j = j_pos; j < mas_j.size(); j++){
+                      if((mas_j[j - 1] < 0) and (mas_j[j] > 0)){
+                        k = k + 1;
+                      }
+                      if(mas_j[i] == (mas_j[j] * (-1))){
+                        dlina_1 = dlina_1 + graf_L[remember_el][mas_j[i]];
+                        i_pos = j;
+                        wall = true;
+                        if((j + 1)> (mas_j.size() - kolvo_2)){
+                          len_t.push_back(dlina_1);
+                          if(branching.size() == 0){
+                            finish_circle = finish_circle + 1;
+                            dlina_1 = 0;
+                            k = a;
+                            i_pos = finish_circle;
+                            wall = false;
+                          }else{
+                            i_pos = branching[branching.size() - 1];
+                            dlina_1 = dlina_2[dlina_2.size() - 1];
+                            dlina_2.pop_back();
+                            branching.pop_back();
+                            k = index_i[index_i.size() - 1];
+                            index_i.pop_back();
+                            wall_2 = true;
+                          }
+                        } // отвечает за продвижение старта
+                        i = i_pos;
+                        break;
+                      }
+                      if((mas_j[j + 1] > 0) and (wall == true) and (mas_j[j] > 0)){
+                        branching.push_back(j); // size - 1
+                        index_i.push_back(k);
+                        dlina_2.push_back(dlina_1);
+                        wall = false;
+                        continue;
+                      }
+                    }
+                  }
+                  if(finish_circle == (kolvo_1 - 1)){
+                    break;
+                  }
+                }
+
+                for(int i = 0; i < len_t.size(); i++){
+                  cout << len_t[i] << " ";
+                }
+                cout << "" << endl;
+                i_pos = len_t[0];
+                for(int i = 0; i < len_t.size(); i++){
+                  if(len_t[i] < i_pos){
+                    i_pos = len_t[i];
+                  }
+                }
+                cout << i_pos << endl;
+
+              }
+            }
+            wall = true;
+
+          }
+
+          if(sms == "13"){
+            if(graf.size() > 0){
+              float cheese = graf_proizvod[0][0];
+              for(int i = 0; i < graf_proizvod.size(); i++){
+                for(int j = 0; j < graf_proizvod[i].size(); j++){
+                  if(graf_proizvod[i][j] > cheese){
+                    cheese = graf_proizvod[i][j];
                   }
                 }
               }
             }
-
-          if(sms == "11"){
-            vector<string> graf_2;
-            graf_2 = topolog_sort(graf);
-            for(auto i : graf_2){
-              cout << i << " ";
-            }
-            cout << "" << endl;
-
           }
 
           if (sms == "0"){
